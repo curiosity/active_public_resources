@@ -16,6 +16,7 @@ require "active_public_resources/drivers/youtube"
 require "active_public_resources/drivers/schooltube"
 require "active_public_resources/drivers/khan_academy"
 require "active_public_resources/drivers/quizlet"
+require "active_public_resources/drivers/curiosity"
 
 # Return Types
 require "active_public_resources/base_return_type"

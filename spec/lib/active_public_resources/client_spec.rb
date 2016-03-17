@@ -72,4 +72,18 @@ describe APR::Client do
     end
   end
 
+  describe "curiosity" do
+    it "should traverse folders", :vcr, :record => :none do
+      results = client.perform_request(:curiosity, criteria)
+      results.items.length.should eq(14)
+
+      folder = results.items.first
+      rc_2 = APR::RequestCriteria.new({ folder: folder.id });
+      results_2 = client.perform_request(:curiosity, rc_2)
+      results_2.items.length.should eq(30)
+      results_2.items.map(&:kind).uniq.should eq(['video'])
+    end
+  end
+
+
 end

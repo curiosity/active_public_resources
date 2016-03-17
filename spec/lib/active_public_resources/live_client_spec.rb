@@ -73,6 +73,23 @@ describe APR::Client, :live_api => true do
     end
   end
 
+  describe "Curiosity" do
+    it "performs initial and subsequent requests" do
+      results = nil
+
+      root_folder = client.perform_request(:curiosity, criteria)
+      root_folder.items.length.should eq(14)
+      
+      sub_folder = root_folder.items.first
+      rc_2 = APR::RequestCriteria.new({ folder: sub_folder.id });
+      results_2 = client.perform_request(:curiosity, rc_2)
+      results_2.items.length.should eq(30)
+      results_2.items.map(&:kind).uniq.should eq(['video'])
+    end
+  end
+
+
+
   describe "Quizlet" do
     it "performs initial and subsequent requests" do
       results = nil
