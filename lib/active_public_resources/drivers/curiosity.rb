@@ -87,24 +87,18 @@ module ActivePublicResources
 
       def parse_video(data)
         img = data['thumbor_meme_image'].gsub('\(', '(').gsub('\)', ')')
-        #img['\('] = '('
-        #img['\)'] = '('
 
         video = ActivePublicResources::ResponseTypes::Video.new
         video.id            = data['id']
         video.title         = data['title']
         video.description   = data['notes']
-        video.thumbnail_url = img #'http://curiosity-data.s3.amazonaws.com/' << data['thumbor_meme_image'].sub
-        video.url           = 'https://curiosity.com/memes/' << data['slug']
-        video.embed_url     = "https://m.curiosity.com/memes/#{data['slug']}"
-        video.duration      = 25
-        video.num_views     = 30
-        video.num_likes     = 35
-        #video.duration      = data['duration'] ? data['duration'].to_i : 0
-        #video.num_views     = data['view_count'] ? data['view_count'].to_i : 0
-        #video.num_likes     = data['thumbs_up'] ? data['thumbs_up'].to_i : 0
+        video.thumbnail_url = img
+        video.url           = "https://curiosity.com/memes/#{data['slug']}/?ref=canvas"
+        video.embed_url     = "https://m.curiosity.com/memes/#{data['slug']}/?ref=canvas"
+        video.duration      = 0
+        video.num_views     = 0
+        video.num_likes     = 0
         video.num_comments  = 0
-        #video.created_date  = Date.parse(data['create_date'])
         video.created_date = Time.at(data['__created__']['utc_ms'] / 1000)
         video.username      = 'Curiosity'
         video.width         = 600
@@ -115,14 +109,14 @@ module ActivePublicResources
           :driver => DRIVER_NAME,
           :remote_id => video.id,
           :url   => video.url,
-          :text  => video.title,
+          :text  => video.description,
           :title => video.title
         )
         video.return_types << APR::ReturnTypes::Iframe.new(
           :driver => DRIVER_NAME,
           :remote_id => video.id,
-          :url    => "https://m.curiosity.com/memes/#{data['slug']}",
-          :text   => video.title,
+          :url    => video.embed_url,
+          :text   => video.description,
           :title  => video.title,
           :width  => 968,
           :height => 560 
